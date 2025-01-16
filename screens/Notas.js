@@ -6,28 +6,11 @@ import { NotasContext } from '../context/NotasContext';
 
 const Notas = () => {
     const { nota, setnota, eliminarNota } = useContext(NotasContext);
-    const [textInput, setTextInput] = useState('');
-    const [showWarning, setShowWarning] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
     const [notaToDelete, setNotaToDelete] = useState(null);
     const navigation = useNavigation();
 
-    const addnota = () => {
-        if (textInput.trim() === '') {
-            setShowWarning(true);
-        } else {
-            const newnota = {
-                id: Math.random(),
-                task: textInput.trim(),
-                completed: false,
-                dateTime: new Date().toISOString().split('T')[0], // Fecha en formato YYYY-MM-DD
-            };
-            setnota([...nota, newnota]);
-            setTextInput('');
-            setShowWarning(false);
-        }
-    };
 
     const showDeleteModal = (notaId) => {
         setNotaToDelete(notaId);
@@ -51,6 +34,8 @@ const Notas = () => {
         <View style={styles.TaskCard}>
             <View style={{ flex: 1 }}>
                 <Text style={styles.TaskTitle}>{notas?.task}</Text>
+                <Text style={styles.TaskText}>{notas?.info}</Text>
+
                 <Text style={styles.TaskDateTime}>Fecha de Creación: {notas?.dateTime}</Text>
             </View>
             <Icon
@@ -85,26 +70,15 @@ const Notas = () => {
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => <ListItem notas={item} />}
             />
+
+
             <View style={styles.Footer}>
-                <View style={styles.InputContainer}>
-                    <TextInput
-                        value={textInput}
-                        placeholder="Agregar tarea"
-                        onChangeText={(text) => {
-                            setTextInput(text);
-                            setShowWarning(false); 
-                        }}
-                        style={[
-                            styles.input,
-                            showWarning && styles.inputWarning,
-                        ]}
-                    />
-                    {showWarning && <Text style={styles.warningText}>La nota no puede estar vacía</Text>}
-                </View>
-                <TouchableOpacity style={styles.fab} onPress={addnota}>
+                <TouchableOpacity style={styles.fab} onPress={()=>navigation.navigate("Crear")}>
                     <Text style={styles.fabText}>+</Text>
                 </TouchableOpacity>
             </View>
+
+
             <Modal
                 transparent={true}
                 animationType="fade"
@@ -182,6 +156,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 8,
     },
+    
+    TaskText: {
+        marginBottom: 8,
+    },
     TaskDateTime: {
         fontSize: 14,
         color: 'gray',
@@ -190,21 +168,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         backgroundColor: 'white',
-        padding: 5,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 2,
     },
-    InputContainer: {
-        flex: 1,
-        marginRight: 70,
-    },
     fab: {
         position: 'absolute',
         right: 16,
-        bottom: 80,
+        bottom: 25,
         backgroundColor: '#007bff',
         width: 56,
         height: 56,
@@ -279,3 +252,4 @@ const styles = StyleSheet.create({
 });
 
 export default Notas;
+
