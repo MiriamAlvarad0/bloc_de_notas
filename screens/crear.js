@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, FlatList, Modal } 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { NotasContext } from '../context/NotasContext';
 
+
 const Notas = () => {
     const { nota, setnota, eliminarNota } = useContext(NotasContext);
     const [textInput, setTextInput] = useState('');
@@ -33,54 +34,44 @@ const Notas = () => {
         }
     };
 
-
-
-
     return (
         <View style={styles.container}>
-            
+            <View style={styles.InputContainer}>
+                <TextInput
+                    value={textInput}
+                    placeholder="Título"
+                    onChangeText={(text) => {
+                        setTextInput(text);
+                        setShowWarning(false); 
+                    }}
+                    style={[
+                        styles.input,
+                        showWarning && styles.inputWarning,
+                    ]}
+                />
+                {showWarning && <Text style={styles.warningText}>La nota debe tener título</Text>}
 
-                <View style={styles.InputContainer}>
-                    <TextInput
-                        value={textInput}
-                        placeholder="Título"
-                        onChangeText={(text) => {
-                            setTextInput(text);
-                            setShowWarning(false); 
-                        }}
-                        style={[
-                            styles.input,
-                            showWarning && styles.inputWarning,
-                        ]}
-                    />
-                    {showWarning && <Text style={styles.warningText}>La nota debe tener titulo</Text>}
-                    
+                {/* Linea  entre titulo y nota */}
+                <View style={styles.separator} />
 
-                    <TextInput
-                        value={textInputcuerpo}
-                        placeholder="Nota"
-                        onChangeText={(text) => {
-                            setTextInputcuerpo(text);
-                            setShowWarningcuerpo(false); 
-                        }}
-                        style={[
-                            styles.input,
-                            showWarningcuerpo && styles.inputWarning,
-                        ]}
-                    />
-                    {showWarningcuerpo && <Text style={styles.warningText}>La nota no puede estar vacía</Text>}
+                <TextInput
+                    value={textInputcuerpo}
+                    placeholder="Nota"
+                    onChangeText={(text) => {
+                        setTextInputcuerpo(text);
+                        setShowWarningcuerpo(false); 
+                    }}
+                    style={[
+                        styles.input,
+                        showWarningcuerpo && styles.inputWarning,
+                    ]}
+                />
+                {showWarningcuerpo && <Text style={styles.warningText}>La nota no puede estar vacía</Text>}
 
                 <TouchableOpacity style={styles.fab} onPress={addnota}>
                     <Text style={styles.fabText}>Crear</Text>
                 </TouchableOpacity> 
-
-
-                
-
-
-
             </View>
-            
         </View>
     );
 };
@@ -88,7 +79,7 @@ const Notas = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#f4f3f1', // fondo
         padding: 16,
     },
     InputContainer: {
@@ -97,9 +88,9 @@ const styles = StyleSheet.create({
     },
     fab: {
         position: 'absolute',
-        left: 250,
-        bottom: 25,
-        backgroundColor: '#007bff',
+        left: 290,
+        bottom: 45,
+        backgroundColor: '#007bff', // color del círculo crear
         width: 56,
         height: 56,
         borderRadius: 28,
@@ -129,9 +120,156 @@ const styles = StyleSheet.create({
     },
     fabText: {
         color: '#fff',
-        fontSize: 20,
+        fontSize: 15, // tamaño de letra para el botón crear
         fontWeight: 'bold',
+    },
+    input: {
+        height: 50,
+        /* borderColor: '#ccc', */
+        /* borderWidth: 1, */
+       /*  borderRadius: 8, */
+       /*  marginBottom: 10, */
+       /*  paddingLeft: 10, */
+        fontSize: 18, // tamaño de letra aumentado
+        fontWeight: 'bold', // negrita 
+        /* shadowOffset: { width: 0, height: 0 }, // Desplazamiento de la sombra */
+        /* shadowOpacity: 0.3, // Transparencia de la sombra */
+        shadowRadius: 3, // Radio de la sombra
+        elevation: 0, // Eleva el compone
+      
+    },
+    inputWarning: {
+        borderColor: '#ff0000',
+    },
+    warningText: {
+        color: '#f4554c',
+        fontSize: 14,
+        fontWeight: 'bold', // negrita en la advertencia 
+    },
+    separator: {
+        height: 2, //linea vertical negrita
+        backgroundColor: 'black',
+        marginVertical: 1, //espacio entre los inputs
     },
 });
 
 export default Notas;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
