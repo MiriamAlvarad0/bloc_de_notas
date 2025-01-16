@@ -14,7 +14,7 @@ const Notas = () => {
         if (textInput.trim() === '') {
             setShowWarning(true);
         }
-        if (textInputcuerpo.trim() === '') {
+        else if (textInputcuerpo.trim() === '') {
             setShowWarningcuerpo(true);
         }
         else {
