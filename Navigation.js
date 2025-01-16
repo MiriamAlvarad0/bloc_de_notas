@@ -2,6 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { NotasProvider } from './context/NotasContext';
 
 // Screens
 import Notas from './screens/Notas';
@@ -15,7 +16,7 @@ function MyTabs() {
         <Tab.Navigator
             initialRouteName="Notas"
             screenOptions={{
-                tabBarActiveTintColor: "cyan",
+                tabBarActiveTintColor: "black",
             }}
         >
             <Tab.Screen 
@@ -25,6 +26,17 @@ function MyTabs() {
                     tabBarLabel: 'Notas',
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="document-text-outline" size={size} color={color} />
+                    ),
+                    headerShown: false,
+                }}  
+            />
+            <Tab.Screen 
+                name="Calendario" 
+                component={Calendario}
+                options={{
+                    tabBarLabel: 'Calendario',
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="calendar-outline" size={size} color={color} />
                     ),
                     headerShown: true,
                 }}  
@@ -40,25 +52,16 @@ function MyTabs() {
                     headerShown: true,
                 }}  
             />
-            <Tab.Screen 
-                name="Calendario" 
-                component={Calendario}
-                options={{
-                    tabBarLabel: 'Calendario',
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="calendar-outline" size={size} color={color} />
-                    ),
-                    headerShown: true,
-                }}  
-            />
         </Tab.Navigator>
     );
 }
 
 export default function Navigation() {
     return (
-        <NavigationContainer>
-            <MyTabs />
-        </NavigationContainer>
+        <NotasProvider>
+            <NavigationContainer>
+                <MyTabs />
+            </NavigationContainer>
+        </NotasProvider>
     );
 }

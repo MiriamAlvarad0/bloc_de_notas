@@ -1,22 +1,44 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { NotasContext } from '../context/NotasContext';
 
 const Eliminados = () => {
-    return (
-        <View style={styles.container}>
-        {/* Card Template */}
+    const { notasEliminadas, recuperarNota } = useContext(NotasContext);
+
+    const ListItem = ({ item }) => (
         <View style={styles.cardRow}>
             <View style={styles.card}>
-            <Text style={styles.title}>Título de la Nota Eliminada</Text>
-            <Text style={styles.date}>Fecha de Eliminación: 14/01/2025</Text>
+                <View style={styles.cardContent}>
+                    <Text style={styles.title}>{item.task}</Text>
+                    <Text style={styles.date}>Fecha de Eliminación: {item.dateTime}</Text>
+                </View>
+                <View style={styles.iconContainer}>
+                    <Icon
+                        name="restore"
+                        size={24}
+                        color="green"
+                        onPress={() => recuperarNota(item.id)}
+                    />
+                </View>
             </View>
-            <TouchableOpacity style={styles.recoverButton}>
-            <Text style={styles.recoverButtonText}>Recuperar</Text>
-            </TouchableOpacity>
-        </View>
         </View>
     );
-    };
+
+    return (
+        <View style={styles.container}>
+            {notasEliminadas.length === 0 ? (
+                <Text>No hay notas eliminadas</Text>
+            ) : (
+                <FlatList
+                    data={notasEliminadas}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => <ListItem item={item} />}
+                />
+            )}
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -33,12 +55,15 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 2,
-    },
-    cardRow: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
+    },
+    cardRow: {
         marginBottom: 16,
+    },
+    cardContent: {
+        flex: 1,
     },
     title: {
         fontSize: 18,
@@ -49,16 +74,11 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#666',
     },
-    recoverButton: {
-        backgroundColor: '#28a745',
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: 4,
-    },
-    recoverButtonText: {
-        color: '#fff',
-        fontSize: 14,
-        fontWeight: 'bold',
+    iconContainer: {
+        padding: 8,
+        backgroundColor: '#f0f0f0',
+        borderRadius: 30,
+        marginLeft: 10,
     },
 });
 
