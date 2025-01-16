@@ -43,12 +43,12 @@ const Eliminados = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#f4f3f1', //fondo
         padding: 16,
     },
     card: {
-        backgroundColor: '#fff',
-        borderRadius: 8,
+        backgroundColor: '#b5d2dd',
+        borderRadius: 20,
         padding: 16,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },

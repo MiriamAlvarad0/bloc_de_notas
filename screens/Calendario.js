@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet, Modal, Text, TouchableOpacity, FlatList } from 'react-native';
+import { View, StyleSheet, Text, FlatList } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { NotasContext } from '../context/NotasContext';
@@ -7,24 +7,24 @@ import { NotasContext } from '../context/NotasContext';
 const Calendario = () => {
     const { nota, notasEliminadas } = useContext(NotasContext);
     const [selectedNotes, setSelectedNotes] = useState([]);
-    const [modalVisible, setModalVisible] = useState(false);
 
     const markedDates = nota
         .filter((n) => !notasEliminadas.some((e) => e.id === n.id))
         .reduce((acc, nota) => {
             const date = nota.dateTime;
-            if (!acc[date]) {
-                acc[date] = { dots: [] };
-            }
-            acc[date].dots.push({ key: nota.id, color: 'blue', selectedDotColor: 'blue', title: nota.task });
+            acc[date] = { marked: true,  dotColor: 'transparent',  customStyles: { container: styles.greenCircle } };
             return acc;
         }, {});
 
     const handleDayPress = (day) => {
         const selectedDate = day.dateString;
         if (markedDates[selectedDate]) {
-            setSelectedNotes(markedDates[selectedDate].dots);
-            setModalVisible(true);
+            const notesForDate = nota.filter(
+                (n) => n.dateTime === selectedDate && !notasEliminadas.some((e) => e.id === n.id)
+            );
+            setSelectedNotes(notesForDate.map((n) => ({ key: n.id, title: n.task })));
+        } else {
+            setSelectedNotes([]);
         }
     };
 
@@ -36,42 +36,29 @@ const Calendario = () => {
 
     return (
         <View style={styles.container}>
-            <Calendar
-                markedDates={Object.keys(markedDates).reduce((acc, date) => {
-                    acc[date] = { dots: markedDates[date].dots };
-                    return acc;
-                }, {})}
-                markingType={'multi-dot'}
-                onDayPress={handleDayPress}
-                renderArrow={(direction) => (
-                    <Icon name={`chevron-${direction}`} size={24} color="black" />
-                )}
-                theme={{
-                    arrowColor: 'black',
-                    todayTextColor: 'red',
-                    dotColor: 'blue',
-                    selectedDotColor: 'blue',
-                }}
+            <View style={styles.calendarWrapper}>
+                <Calendar
+                    markedDates={markedDates}
+                    markingType={'custom'}
+                    onDayPress={handleDayPress}
+                    renderArrow={(direction) => (
+                        <Icon name={`chevron-${direction}`} size={24} color="black" />
+                    )}
+                    theme={{
+                        arrowColor: 'black',
+                        todayTextColor: 'black', 
+                        dayTextColor: 'black', 
+                        textMonthFontWeight: 'bold',
+                        
+                    }}
+                />
+            </View>
+            <FlatList
+                data={selectedNotes}
+                keyExtractor={(item) => item.key.toString()}
+                renderItem={renderNote}
+                contentContainerStyle={styles.notesContainer}
             />
-            <Modal
-                transparent={true}
-                animationType="fade"
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={styles.ModalBackground}>
-                    <View style={styles.ModalBox}>
-                        <FlatList
-                            data={selectedNotes}
-                            keyExtractor={(item) => item.key.toString()}
-                            renderItem={renderNote}
-                        />
-                        <TouchableOpacity style={styles.ModalButton} onPress={() => setModalVisible(false)}>
-                            <Text style={styles.ModalButtonText}>Cerrar</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
         </View>
     );
 };
@@ -79,42 +66,37 @@ const Calendario = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#f4f3f1', //fondo
         padding: 16,
     },
-    ModalBackground: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "rgba(0, 0, 0, 0.5)"
-    },
-    ModalBox: {
-        width: "80%",
-        backgroundColor: "white",
-        padding: 20,
+    calendarWrapper: {
+        borderWidth: 2,
+        borderColor: 'black', //es el marco negro para el calendatio
         borderRadius: 10,
-        alignItems: "center"
+        overflow: 'hidden',
+        marginBottom: 16,
+    },
+    greenCircle: {
+        backgroundColor: '#25d37f',
+        borderRadius: 15,
+    },
+    notesContainer: {
+        flexGrow: 1,  //eta propiedad asegura que la lista ocupe todo el espacio disponible
     },
     noteItem: {
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc'
+        borderBottomWidth: 1, //bordesillo lo aplana abajo
+        padding: 15,
+        backgroundColor: '#25d37f', //fondo verde
+        borderRadius: 150,  //borde ovalado
+        borderWidth: 1,  //ancho del borde
+        borderColor: 'black',  //color borde negro
+        marginBottom: 10,  //espacio entre las notas
     },
     noteText: {
         fontSize: 16,
-        color: "black"
+        color: 'black',
+        textAlign: 'center', 
     },
-    ModalButton: {
-        backgroundColor: "red",
-        padding: 15,
-        borderRadius: 10,
-        alignItems: "center",
-        marginTop: 20
-    },
-    ModalButtonText: {
-        color: "black",
-        fontSize: 15
-    }
 });
 
 export default Calendario;
