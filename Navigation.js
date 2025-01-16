@@ -3,11 +3,38 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { NotasProvider } from './context/NotasContext';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 // Screens
 import Notas from './screens/Notas';
 import Eliminados from './screens/Elimnados';
 import Calendario from './screens/Calendario';
+import crear from './screens/crear';
+
+const HomeStackNavigator = createNativeStackNavigator();
+
+function MyStack() {
+    return (
+        <HomeStackNavigator.Navigator
+            initialRouteName="Notas"
+        >
+            <HomeStackNavigator.Screen
+                name="Notas"
+                component={Notas}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <HomeStackNavigator.Screen
+                name="Crear"
+                component={crear}
+                options={{
+                    headerBackTitleVisible: false,
+                }}
+            />
+        </HomeStackNavigator.Navigator>
+    )
+}   
 
 const Tab = createBottomTabNavigator();
 
@@ -21,7 +48,7 @@ function MyTabs() {
         >
             <Tab.Screen 
                 name="Notas" 
-                component={Notas}
+                component={MyStack}
                 options={{
                     tabBarLabel: 'Notas',
                     tabBarIcon: ({ color, size }) => (
@@ -52,6 +79,7 @@ function MyTabs() {
                     headerShown: true,
                 }}  
             />
+            
         </Tab.Navigator>
     );
 }
