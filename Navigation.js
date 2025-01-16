@@ -55,6 +55,7 @@ function MyTabs() {
                         <Ionicons name="document-text-outline" size={size} color={color} />
                     ),
                     headerShown: false,
+                    headerTitleAlign: 'center',
                 }}  
             />
             <Tab.Screen 
@@ -66,6 +67,7 @@ function MyTabs() {
                         <Ionicons name="calendar-outline" size={size} color={color} />
                     ),
                     headerShown: true,
+                    headerTitleAlign: 'center',
                 }}  
             />
             <Tab.Screen 
@@ -77,6 +79,10 @@ function MyTabs() {
                         <Ionicons name="trash-outline" size={size} color={color} />
                     ),
                     headerShown: true,
+                    headerTitleAlign: 'center',
+                    headerStyle: { backgroundColor: '#f4554c' },  //cambia el color de fondo del encabezado
+                    headerTitleStyle: { color: 'white' },  //cambia el color del titulo del encabezado
+                    
                 }}  
             />
             

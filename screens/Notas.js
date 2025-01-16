@@ -59,7 +59,7 @@ const Notas = () => {
         <View style={styles.container}>
             {/* Encabezado superior */}
             <View style={styles.header}>
-                <Text style={styles.buenDia}>Buen Día</Text>
+                <Text style={[styles.buenDia, {marginTop:23}]}>Buen Día</Text>
                 <Text style={styles.hoy}>Hoy</Text>
                 <Text style={styles.fecha}>{getCurrentDate()}</Text>
             </View>
