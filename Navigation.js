@@ -30,6 +30,7 @@ function MyStack() {
                 component={crear}
                 options={{
                     headerBackTitleVisible: false,
+                    headerTitleAlign: 'center',
                 }}
             />
         </HomeStackNavigator.Navigator>

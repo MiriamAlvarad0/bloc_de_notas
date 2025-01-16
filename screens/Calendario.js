@@ -38,9 +38,16 @@ const Calendario = () => {
 
     const renderNote = ({ item }) => (
         <View style={styles.noteItem}>
-            <Text style={styles.noteText}>{item.title}</Text>
+            <View style={styles.row}>
+                <Text style={styles.noteTitle}>{item.title}</Text>
+                <View style={styles.verticalLine} />
+                <Text style={styles.noteContent}>Contenido de la nota</Text>
+            </View>
         </View>
     );
+   
+   
+   
 
     return (
         <View style={styles.container}>
@@ -92,12 +99,21 @@ const styles = StyleSheet.create({
     },
     noteItem: {
         borderBottomWidth: 1, 
-        padding: 15,
+        padding: 5,
         backgroundColor: '#25d37f', 
-        borderRadius: 150,  
+        borderRadius: 40, // 
         borderWidth: 1,  
         borderColor: 'black',  
-        marginBottom: 10,  
+        marginBottom: 10,
+        justifyContent: 'center', //cntra el contenido verticalmente
+        alignItems: 'center', //centra el contenido horizontalmente
+    },
+    noteTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',  //negrita
+        color: 'black', //titulo en negro
+        textAlign: 'center',
+        marginBottom: 1,  //aade un pequeño espacio debajo del titulo
     },
     noteText: {
         fontSize: 16,
@@ -105,5 +121,7 @@ const styles = StyleSheet.create({
         textAlign: 'center', 
     },
 });
+
+
 
 export default Calendario;
