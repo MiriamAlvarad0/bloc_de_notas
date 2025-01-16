@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -7,25 +7,33 @@ import { NotasContext } from '../context/NotasContext';
 const Calendario = () => {
     const { nota, notasEliminadas } = useContext(NotasContext);
     const [selectedNotes, setSelectedNotes] = useState([]);
+    const [selectedDate, setSelectedDate] = useState(null);  // Para manejar el día seleccionado
 
     const markedDates = nota
         .filter((n) => !notasEliminadas.some((e) => e.id === n.id))
         .reduce((acc, nota) => {
             const date = nota.dateTime;
-            acc[date] = { marked: true,  dotColor: 'transparent',  customStyles: { container: styles.greenCircle } };
+            acc[date] = { marked: true, dotColor: 'transparent', customStyles: { container: styles.greenCircle } };
             return acc;
         }, {});
 
-    const handleDayPress = (day) => {
-        const selectedDate = day.dateString;
-        if (markedDates[selectedDate]) {
+    // useEffect para actualizar las notas cuando el contexto cambia
+    useEffect(() => {
+        if (selectedDate) {
             const notesForDate = nota.filter(
                 (n) => n.dateTime === selectedDate && !notasEliminadas.some((e) => e.id === n.id)
             );
             setSelectedNotes(notesForDate.map((n) => ({ key: n.id, title: n.task })));
-        } else {
-            setSelectedNotes([]);
         }
+    }, [nota, notasEliminadas, selectedDate]);  // Dependemos de las notas, notas eliminadas y fecha seleccionada
+
+    const handleDayPress = (day) => {
+        const selectedDate = day.dateString;
+        setSelectedDate(selectedDate); // Actualizamos el día seleccionado
+        const notesForDate = nota.filter(
+            (n) => n.dateTime === selectedDate && !notasEliminadas.some((e) => e.id === n.id)
+        );
+        setSelectedNotes(notesForDate.map((n) => ({ key: n.id, title: n.task })));
     };
 
     const renderNote = ({ item }) => (
@@ -49,7 +57,6 @@ const Calendario = () => {
                         todayTextColor: 'black', 
                         dayTextColor: 'black', 
                         textMonthFontWeight: 'bold',
-                        
                     }}
                 />
             </View>
@@ -66,12 +73,12 @@ const Calendario = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f4f3f1', //fondo
+        backgroundColor: '#f4f3f1', 
         padding: 16,
     },
     calendarWrapper: {
         borderWidth: 2,
-        borderColor: 'black', //es el marco negro para el calendatio
+        borderColor: 'black', 
         borderRadius: 10,
         overflow: 'hidden',
         marginBottom: 16,
@@ -81,16 +88,16 @@ const styles = StyleSheet.create({
         borderRadius: 15,
     },
     notesContainer: {
-        flexGrow: 1,  //eta propiedad asegura que la lista ocupe todo el espacio disponible
+        flexGrow: 1,  
     },
     noteItem: {
-        borderBottomWidth: 1, //bordesillo lo aplana abajo
+        borderBottomWidth: 1, 
         padding: 15,
-        backgroundColor: '#25d37f', //fondo verde
-        borderRadius: 150,  //borde ovalado
-        borderWidth: 1,  //ancho del borde
-        borderColor: 'black',  //color borde negro
-        marginBottom: 10,  //espacio entre las notas
+        backgroundColor: '#25d37f', 
+        borderRadius: 150,  
+        borderWidth: 1,  
+        borderColor: 'black',  
+        marginBottom: 10,  
     },
     noteText: {
         fontSize: 16,
