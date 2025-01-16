@@ -7,7 +7,7 @@ import { NotasContext } from '../context/NotasContext';
 const Calendario = () => {
     const { nota, notasEliminadas } = useContext(NotasContext);
     const [selectedNotes, setSelectedNotes] = useState([]);
-    const [selectedDate, setSelectedDate] = useState(null);  // Para manejar el día seleccionado
+    const [selectedDate, setSelectedDate] = useState(null); 
 
     const markedDates = nota
         .filter((n) => !notasEliminadas.some((e) => e.id === n.id))
@@ -17,7 +17,6 @@ const Calendario = () => {
             return acc;
         }, {});
 
-    // useEffect para actualizar las notas cuando el contexto cambia
     useEffect(() => {
         if (selectedDate) {
             const notesForDate = nota.filter(
@@ -25,11 +24,11 @@ const Calendario = () => {
             );
             setSelectedNotes(notesForDate.map((n) => ({ key: n.id, title: n.task })));
         }
-    }, [nota, notasEliminadas, selectedDate]);  // Dependemos de las notas, notas eliminadas y fecha seleccionada
+    }, [nota, notasEliminadas, selectedDate]);
 
     const handleDayPress = (day) => {
         const selectedDate = day.dateString;
-        setSelectedDate(selectedDate); // Actualizamos el día seleccionado
+        setSelectedDate(selectedDate);
         const notesForDate = nota.filter(
             (n) => n.dateTime === selectedDate && !notasEliminadas.some((e) => e.id === n.id)
         );
@@ -41,14 +40,9 @@ const Calendario = () => {
             <View style={styles.row}>
                 <Text style={styles.noteTitle}>{item.title}</Text>
                 <View style={styles.verticalLine} />
-                <Text style={styles.noteContent}>Contenido de la nota</Text>
             </View>
         </View>
     );
-   
-   
-   
-
     return (
         <View style={styles.container}>
             <View style={styles.calendarWrapper}>
